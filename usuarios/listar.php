@@ -1,5 +1,14 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once BASE_PATH . '/src/usuario_crud.php';
+
+$usuarios = buscarUsuario($conexao);
+
+
+
+require_once BASE_PATH . '/src/usuario_crud.php';
+
+$usuario = buscarUsuario($conexao);
 
 
 $titulo = "Usuários |";
@@ -9,7 +18,7 @@ require_once BASE_PATH . '/includes/cabecalho.php';
 <section class="text-center mb-4 border rounded-3 p-4 border-primary-subtle">
     <h3><i class="bi bi-person-gear"></i> Gerenciar Usuários</h3>
 
-    
+
 
     <p class="text-center my-4">
         <a href="inserir.php" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Adicionar Novo Usuário</a>
@@ -17,7 +26,7 @@ require_once BASE_PATH . '/includes/cabecalho.php';
 
     <div class="table-responsive">
         <table class="table table-hover align-middle caption-top">
-            <caption>Quantidade de registros: 1</caption>
+            <caption>Quantidade de registros: <?= count($usuario) ?></caption>
             <thead class="align-middle table-light">
                 <tr>
                     <th>ID</th>
@@ -27,18 +36,21 @@ require_once BASE_PATH . '/includes/cabecalho.php';
                 </tr>
             </thead>
             <tbody>
-                
+                 <?php foreach ($usuario as $usuario): ?>
                     <tr>
-                        <td>ID do Usuário...</td>
-                        <td>Nome do Usuário...</td>
-                        <td>E-mail do Usuário...</td>
+                        <td><?= $usuario['id'] ?></td>
+                        <td><?= $usuario['nome'] ?></td>
+                        <td><?= $usuario['email'] ?></td>
                         <td class="text-end">
-                            <a class="btn btn-warning btn-sm" href="editar.php"><i class="bi bi-pencil-square"></i> Editar</a>
+                            <a class="btn btn-warning btn-sm" href="editar.php?id=<?= $usuario['id'] ?>"><i class="bi bi-pencil-square"></i> Editar</a>
                         </td>
                         <td class="text-start">
-                            <a class="btn btn-danger btn-sm" href="excluir.php"><i class="bi bi-trash"></i> Excluir</a>
+                            <a class="btn btn-danger btn-sm" href="excluir.php?id=<?= $usuario['id'] ?>"><i class="bi bi-trash"></i> Excluir</a>
                         </td>
                     </tr>
+
+                 <?php endforeach; ?>   
+
                 
             </tbody>
         </table>
