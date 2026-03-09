@@ -1,6 +1,34 @@
 <?php
 require_once __DIR__ . '/../config.php';
 
+//Recebe os dados do formulário
+if ($_SERVER['REQUEST_METHOD'] === 'POST') 
+    {
+    $nome = ($_POST['nome']);
+    $email = ($_POST['email']);
+    $senha = ($_POST['senha']);
+
+
+    //Verifica se os campos foram preenchidos
+    if($nome && $email && $senha)
+        {
+            $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)";
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute([
+                ':nome' => $nome,
+                ':email' => $email,
+                ':senha' => password_hash ($senha, PASSWORD_DEFAULT)
+
+            ]);
+            //Redireciona para a página de listagem com uma mensagem de sucesso
+            header('Location: listar.php?status=sucesso');
+            exit;
+        //se não, exibe uma mensagem de erro
+        } else 
+        {
+            echo "<div class='alert alert-danger'> Todos os campos são obrigatórios.</div>";
+        }
+}
 
 $titulo = "Adicionar Usuario |";
 require_once BASE_PATH . '/includes/cabecalho.php';
