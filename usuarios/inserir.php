@@ -1,6 +1,25 @@
 <?php
 require_once __DIR__ . '/../config.php';
+if($_SERVER ['REQUEST_METHOD'] === 'POST') {
 
+    $nome = ($_POST ['nome'] ?? '');
+    $email = ($_POST ['email'] ?? '');
+    $senha = ($_POST ['senha'] ?? '');
+
+    if (empty($nome) || empty($email) || empty($senha)) {
+        $erro = "Todos os campos são obrigatórios.";
+    } else {
+        $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)";
+        $stmt = $conexao->prepare($sql);
+        $stmt->execute([
+            ':nome' => $nome,
+            ':email' => $email,
+            ':senha' => password_hash($senha, PASSWORD_DEFAULT)
+        ]);
+        header('Location: ' . BASE_URL . '/usuarios/listar.php');
+        exit;
+    }
+}
 
 $titulo = "Adicionar Usuario |";
 require_once BASE_PATH . '/includes/cabecalho.php';
