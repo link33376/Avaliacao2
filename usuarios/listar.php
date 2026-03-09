@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once BASE_PATH . '/src/usuario_crud.php'; //requirir uma base de dados
 
+$usuarios = buscarUsuario($conexao);  //adicionamos uma variável para buscar o usuário no banco de dados
 
 $titulo = "Usuários |";
 require_once BASE_PATH . '/includes/cabecalho.php';
@@ -17,7 +19,7 @@ require_once BASE_PATH . '/includes/cabecalho.php';
 
     <div class="table-responsive">
         <table class="table table-hover align-middle caption-top">
-            <caption>Quantidade de registros: 1</caption>
+            <caption>Quantidade de registros: <?= count($usuarios)?></caption> <!-- função count para mostrar quantidade de usuarios cadastrados  -->
             <thead class="align-middle table-light">
                 <tr>
                     <th>ID</th>
@@ -27,11 +29,13 @@ require_once BASE_PATH . '/includes/cabecalho.php';
                 </tr>
             </thead>
             <tbody>
+
                 
+                  <?php foreach($usuarios as $usuario) : ?> <!-- foreach para varrer o array usuarios procurando os dados id, nome e email -->
                     <tr>
-                        <td>ID do Usuário...</td>
-                        <td>Nome do Usuário...</td>
-                        <td>E-mail do Usuário...</td>
+                        <td><?=$usuario ['id'] ?></td> 
+                        <td><?= $usuario ['nome'] ?></td>
+                        <td><?= $usuario ['email'] ?></td>
                         <td class="text-end">
                             <a class="btn btn-warning btn-sm" href="editar.php"><i class="bi bi-pencil-square"></i> Editar</a>
                         </td>
@@ -39,8 +43,11 @@ require_once BASE_PATH . '/includes/cabecalho.php';
                             <a class="btn btn-danger btn-sm" href="excluir.php"><i class="bi bi-trash"></i> Excluir</a>
                         </td>
                     </tr>
+                    <?php endforeach?>
                 
             </tbody>
+
+           
         </table>
     </div>
 </section>
